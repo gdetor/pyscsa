@@ -1,5 +1,8 @@
 # This script provides a Python class that implements the Semi-Classical Signal
-# Analysis (SCSA) algorithm proposed by []
+# Analysis (SCSA) algorithm proposed by
+#    [1] Laleg-Kirati, Taous-Meriem, Emmanuelle Crépeau, and Michel Sorine.
+#        "Semi-classical signal analysis."
+#         Mathematics of Control, signals, and Systems 25 (2013): 37-61.
 # Copyright (C) 2024  Georgios Is. Detorakis
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +25,7 @@ from scipy.integrate import simpson
 
 class SCSA:
     """ Main class that implements the Semi-Classical Signal Analysis
-    algorithm proposed in:
+    algorithm proposed in [1].
     """
     def __init__(self,
                  M=100,
@@ -32,11 +35,11 @@ class SCSA:
                  atol=1e-08):
         """ Constructor of the SCSA class.
 
-        @param M (int)
-        @param Dx (float)
-        @param is_sym_neg_def (bool)
-        @param rtol (float)
-        @param atol (float)
+        @param M (int)  Number of discretization points (steps)
+        @param Dx (float)  Discretization step
+        @param is_sym_neg_def (bool)  Diagnostics for matrix D2
+        @param rtol (float) Relative tolerance for matrix diagnostics
+        @param atol (float) Absolute tolerance for matrix diagnostics
 
         """
         self.M = M
@@ -55,13 +58,14 @@ class SCSA:
     def buildDifferentiationMatrix(self):
         """ This method constructs a second order differentiation matrix for
         discretizing the Schrondiger operator. The matrix is used in solving
-        the eigenvalue problem [].
+        the eigenvalue problem [1].
 
-        @param
+        @param Void
 
-        @note
+        @note For more details on how to construct the matrix D2 please see [1]
 
-        @return
+        @return The second order differentiation matrix that discretizes the
+        Schrodinger operator
         """
         Delta = (2.0 * np.pi) / self.M
 
@@ -91,13 +95,15 @@ class SCSA:
         """ This function implements the basic algorithm for estimating the
         SCSA of the input signal y for a given χ (chi).
 
-        @param y (ndarray)
-        @param chi (float)
-        @param x (ndarray)
+        @param y (ndarray)  Input signal
+        @param chi (float)  Parameter chi of the algorithm (see [1])
+        @param x (ndarray)  Discretization points (e.g., [0, 1/n, 2/n, ...])
 
-        @note
+        @note The entire algorithm is presented in [1]. Before starting this
+        implementation, you are advised to read [1].
 
-        @return
+        @return The eigenfunctions U (ndarray) and the reconstruction, yhat
+        (ndarray), of the input signal y
         """
         if x is None:
             x = np.linspace(0, len(y), len(y))
