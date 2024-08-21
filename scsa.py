@@ -120,7 +120,7 @@ class SCSA:
         for i in range(U.shape[1]):
             Un[:, i] = U[:, i] / np.sqrt(simpson(U[:, i]**2, x=x))
 
-        Nx = len(V)
-        yhat = (4.0 / chi) * np.sum(Un[:, :Nx]**2 * K[:Nx], axis=1)
+        self.Nx = len(V)
+        yhat = (4.0 / chi) * np.sum(Un[:, :self.Nx]**2 * K[:self.Nx], axis=1)
 
         return Un, yhat
